@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Polls;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -34,6 +36,10 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'consumable' => [
+                'user_participation' => User::all()->count(),
+                'polls' => Polls::all()->count(),
+            ]
         ];
     }
 }
