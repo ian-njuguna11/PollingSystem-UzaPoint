@@ -7,8 +7,14 @@
 ### Installation
 
 #### 0. Intro
-![screenshot1](PollsHome.png)
-![screenshot1](pollsindex.png)
+ `CREAT POLLS` 
+![screenshot1](create_polls.png)
+ `ADD QUESTION TO POLL` Click on the gear icon to take a poll or the view icon to see how each question performed. 
+
+![screenshot1](take_poll_gear.png)
+
+![screenshot1](poll_voting.png)
+
 ![screenshot1](questionreports.png)
 
 #### 1. Clone the repository
