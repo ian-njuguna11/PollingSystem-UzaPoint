@@ -6,6 +6,8 @@
 3. PHP 8
 ### Installation
 
+I've used laravel, vue js and inertia to build this simple application as per the requirements of Uzapoint Technical Assessment.
+
 #### 0. Intro
  `CREAT POLLS` 
 ![screenshot1](create_polls.png)
