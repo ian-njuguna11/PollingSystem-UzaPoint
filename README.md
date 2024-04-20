@@ -7,9 +7,9 @@
 ### Installation
 
 #### 0. Intro
-![screenshot1](PollsHome.png.png)
+![screenshot1](PollsHome.png)
 ![screenshot1](pollsindex.png)
-![screenshot1](pollquestionreportspng.png)
+![screenshot1](questionreports.png)
 
 #### 1. Clone the repository
 ```bash
