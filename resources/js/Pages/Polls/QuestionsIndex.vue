@@ -172,80 +172,9 @@ onMounted(() => {
           </div>
         </div>
 
-        <!---stats-->
-        <div class="grid grid-cols-12 gap-4">
-          <div class="col-span-12 sm:col-span-4">
-            <div
-              class="p-4 relative bg-gray-800 border border-gray-800 shadow-lg rounded-2xl"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-14 w-14 absolute bottom-4 right-3 text-green-400"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
-                <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
-              </svg>
-
-              <div class="text-2xl text-gray-100 font-medium leading-8 mt-5">
-                {{ userPolls }}
-              </div>
-              <div class="text-sm text-gray-500">Poll Number of votes</div>
-            </div>
-          </div>
-          <div class="col-span-12 sm:col-span-4">
-            <div
-              class="p-4 relative bg-gray-800 border border-gray-800 shadow-lg rounded-2xl"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-14 w-14 absolute bottom-4 right-3 text-blue-500"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"
-                />
-              </svg>
-              <div class="flex justify-between items-center">
-                <i class="fab fa-behance text-xl text-gray-400"></i>
-              </div>
-              <div class="text-2xl text-gray-100 font-medium leading-8 mt-5">
-                {{ userParticipation }}
-              </div>
-              <div class="text-sm text-gray-500">Poll participation</div>
-            </div>
-          </div>
-          <div class="col-span-12 sm:col-span-4">
-            <div
-              class="p-4 relative bg-gray-800 border border-gray-800 shadow-lg rounded-2xl"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                class="h-14 w-14 absolute bottom-4 right-3 text-yellow-300"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-
-              <div class="flex justify-between items-center">
-                <i class="fab fa-codepen text-xl text-gray-400"></i>
-              </div>
-              <div class="text-2xl text-gray-100 font-medium leading-8 mt-5">
-                {{ userParticipation }}
-              </div>
-              <div class="text-sm text-gray-500">Poll Rating</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="grid gap-4 grid-cols-1 md:grid-cols-2 overflow-scroll">
+        <div
+          class="grid gap-4 grid-cols-1 md:grid-cols-2 overflow-scroll min-h-[770px]"
+        >
           <!--confirm modal-->
           <!--elements-->
           <div class="flex flex-col space-y-4 overflow-y-scroll">

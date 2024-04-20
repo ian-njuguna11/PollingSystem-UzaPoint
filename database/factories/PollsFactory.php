@@ -20,7 +20,7 @@ class PollsFactory extends Factory
 
         return [
         'poll_tittle' => rtrim(fake()->sentence(2), '.'),
-        'votes' => rand(0,User::all()->count()),
+        'votes' => rand(0,10),
         'questions' => rand(0, 10),
         'userId' => User::all()->random()->id,
         'end_date' => fake()->date()

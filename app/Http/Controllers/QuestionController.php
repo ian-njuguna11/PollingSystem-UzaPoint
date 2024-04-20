@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Choices;
 use App\Models\Question;
+use Illuminate\Console\View\Components\Choice;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -35,7 +37,27 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd(request()->all());
+
+        try{
+            $_question = Question::create([
+            'question_description' => request()->input('question_description'),
+            'votes' => request()->input('votes') ?? 30,
+            'choices' => count(request()->input('choices')),
+            'pollId' => request()->input('pollId'),
+            ])->choice()->createMany(array_map(function ($choice) {
+              return ['choice_desc' => $choice, 'votes' => 4];
+            }, request()->input('choices')));
+
+
+
+        }catch(\Exception $e){
+           // To:do Handdle Exceptio
+        }
+
+
+
+
     }
 
     /**

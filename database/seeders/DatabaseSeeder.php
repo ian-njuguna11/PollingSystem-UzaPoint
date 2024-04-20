@@ -19,10 +19,10 @@ class DatabaseSeeder extends Seeder
         User::truncate();
         Polls::truncate();
 
-        \App\Models\User::factory(10)->create();
-        \App\Models\Polls::factory(10)->create();
-        \App\Models\Question::factory(10)->create();
-        \App\Models\Choices::factory(10)->create();
+        // \App\Models\User::factory(10)->create();
+        // \App\Models\Polls::factory(10)->create();
+        // \App\Models\Question::factory(10)->create();
+        // \App\Models\Choices::factory(10)->create();
         //choices
 
         // \App\Models\User::factory()->create([

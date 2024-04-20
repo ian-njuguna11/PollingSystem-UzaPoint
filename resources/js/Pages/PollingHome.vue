@@ -1,12 +1,15 @@
 <script setup>
 import { Head, usePage, Link, router } from "@inertiajs/vue3";
-import { computed, onMounted, ref } from "vue";
+import { Inertia } from "@inertiajs/inertia";
+import { computed, onMounted, ref, reactive } from "vue";
 
 import Paginate from "@/Components/Paginate.vue";
 
 const props = defineProps({
   pollId: String,
   polls: Object,
+  system_polls: Number,
+  poll_participation: Number,
 });
 
 // Access props
@@ -15,17 +18,42 @@ const page = usePage();
 
 const user = computed(() => page.props.auth.user);
 const consumable = computed(() => page.props.consumable);
+
 const pollId = ref(props.pollId);
 const polls = ref(props.polls);
 
-const userPolls = 100;
-const userParticipation = 90;
+const system_polls = ref(props.system_polls);
+const userParticipation = ref(props.poll_participation);
 
 // If you need to perform some action when the component is mounted
-onMounted(() => {
-  console.log(props.polls);
-  console.log(props.polls.links);
+// onMounted(() => {
+//   console.log(props.system_polls);
+// });
+
+const form = reactive({
+  poll_tittle: null,
+  votes: null,
+  questions: null,
+  end_date: null,
 });
+
+const handleSubmitPollForm = () => {
+  router.post(route("polls.store"), form, {
+    onSuccess: (data) => {
+      // reactive elements
+
+      system_polls.value = props.system_polls;
+      // const userParticipation = ref(props.poll_participation);
+
+      polls.value = data.props.polls;
+      form.poll_tittle = "";
+      form.votes = "";
+      form.questions = "";
+      form.userId = "";
+      form.end_date = "";
+    },
+  });
+};
 </script>
 
 <template>
@@ -98,7 +126,7 @@ onMounted(() => {
                         d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"
                       ></path>
                     </svg>
-                    <p class="">{{ userPolls }} polls</p>
+                    <p class="">{{ system_polls }} polls per user</p>
                   </div>
                   <div class="flex-1 inline-flex items-center">
                     <svg
@@ -142,7 +170,7 @@ onMounted(() => {
               </svg>
 
               <div class="text-2xl text-gray-100 font-medium leading-8 mt-5">
-                {{ userPolls }}
+                {{ system_polls }}
               </div>
               <div class="text-sm text-gray-500">System Polls</div>
             </div>
@@ -191,59 +219,97 @@ onMounted(() => {
                 <i class="fab fa-codepen text-xl text-gray-400"></i>
               </div>
               <div class="text-2xl text-gray-100 font-medium leading-8 mt-5">
-                {{ userParticipation }} / {{ userPolls }}
+                {{ userParticipation }} / {{ system_polls }}
               </div>
               <div class="text-sm text-gray-500">Poll Rating</div>
             </div>
           </div>
         </div>
+
         <div class="grid gap-4 grid-cols-1 md:grid-cols-2">
           <!--confirm modal-->
           <div
             class="flex p-4 relative items-center justify-center bg-gray-800 border border-gray-800 shadow-lg rounded-2xl h-[38rem]"
           >
             <div class="w-full">
-              <form class="max-w-sm mx-auto">
+              <form
+                @submit.prevent="handleSubmitPollForm"
+                class="max-w-sm mx-auto"
+              >
                 <h1 class="text-gray-300 font-bold mb-5">
                   Create poll <br />
                   and <span class="text-green-400">monitor</span> live polls
                   interactions.
                 </h1>
+
                 <div class="mb-5">
                   <label
-                    for="email"
+                    for="poll_tittle"
                     class="block mb-2 text-sm font-medium text-gray-300 dark:text-white"
-                    >Your email</label
-                  >
+                    >Poll Tittle *
+                  </label>
                   <input
-                    type="email"
-                    id="email"
-                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                    placeholder="name@flowbite.com"
+                    v-model="form.poll_tittle"
+                    type="poll_tittle"
+                    id="poll_tittle"
+                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                    placeholder="This is poll for households .... (example)"
                     required
                   />
                 </div>
 
-                <div class="flex items-start mb-5">
-                  <div class="flex items-center h-5">
-                    <input
-                      id="terms"
-                      type="checkbox"
-                      value=""
-                      class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-                      required
-                      checked
-                    />
-                  </div>
+                <div class="mb-5">
                   <label
-                    for="terms"
-                    class="ms-2 text-sm font-medium text-gray-300 dark:text-gray-300"
-                    >Is poll multiple questions
+                    for="votes"
+                    class="block mb-2 text-sm font-medium text-gray-300 dark:text-white"
+                    >How many votes are you expecting to consider the poll a
+                    success? *
                   </label>
+                  <input
+                    v-model="form.votes"
+                    type="number"
+                    id="votes"
+                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                    placeholder="example ( 100 ) ...."
+                    required
+                  />
                 </div>
+
+                <div class="mb-5">
+                  <label
+                    for="questions"
+                    class="block mb-2 text-sm font-medium text-gray-300 dark:text-white"
+                    >How many question does the poll have? *
+                  </label>
+                  <input
+                    v-model="form.questions"
+                    type="number"
+                    id="questions"
+                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                    placeholder="example ( 20  questions ) ...."
+                    required
+                  />
+                </div>
+
+                <div class="mb-5">
+                  <label
+                    for="end_date"
+                    class="block mb-2 text-sm font-medium text-gray-300 dark:text-white"
+                    >Expected end date for this exercise ? *
+                  </label>
+                  <input
+                    v-model="form.end_date"
+                    type="date"
+                    id="end_date"
+                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                    placeholder="10-10-2024"
+                    required
+                  />
+                </div>
+
                 <button
                   type="submit"
-                  class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
                   Create a New Poll
                 </button>
@@ -309,9 +375,17 @@ onMounted(() => {
                 </Link>
               </div>
             </div>
+
+            <div
+              v-show="polls.data.length == 0"
+              class="flex text-gray-300 font-bold font-serif item-center justify-center min-w-[230px] mt-[110px]"
+            >
+              <h2>No Polls at the moment ...</h2>
+            </div>
+
             <!-- //paginate componet -->
             <div class="mx-auto">
-              <Paginate :links="polls.links" />
+              <Paginate v-show="polls.data.length > 0" :links="polls.links" />
             </div>
           </div>
         </div>

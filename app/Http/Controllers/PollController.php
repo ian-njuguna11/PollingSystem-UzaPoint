@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PollsResource;
 use App\Models\Polls;
 use App\Models\Question;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -25,17 +28,15 @@ class PollController extends Controller
             // query for
 
             $polls = Polls::paginate(6)->through(function ($item) {
-                return [
-                    'id' => $item->id,
-                    'poll_tittle' => $item->poll_tittle,
-                    // etc
-                ];
+                return new PollsResource($item) ;
             });
 
             //    dd($polls);
             return Inertia::render('PollingHome', [
                 'poll-id' => request()->input('poll-id') ?? null,
-                'polls' => $polls
+                'polls' => $polls,
+                'system_polls' => Polls::all()->count(),
+                'poll_participation' => User::all()->count()
             ]);
        }
 
@@ -59,10 +60,11 @@ class PollController extends Controller
                 // etc
             ];
          });
+
         return Inertia::render('Polls/PollsIndex', [
             'poll-id' => request()->input('poll-id') ?? null,
             'questions' => $questions,
-            'poll' => Polls::find(request()->input('poll-id'))?? null,
+            'poll' => Polls::find(request()->input('poll-id')) ?? null,
             'days' => request()->has('poll-id') ? Carbon::parse(Polls::find(request()->input('poll-id'))->end_date)->diffForHumans() : null
         ]);
     }
@@ -80,7 +82,15 @@ class PollController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       Polls::create([
+        'poll_tittle' => request()->input('poll_tittle'),
+        'votes' => request()->input('votes') ,
+        'questions' => request()->input('questions') ,
+        'userId' => Auth::user()->id,
+        'end_date' => request()->input('end_date')
+       ]);
+
+        return to_route('polls.home');
     }
 
     /**
@@ -113,5 +123,16 @@ class PollController extends Controller
     public function destroy(Polls $polls)
     {
         //
+    }
+
+    public function polls()
+    {
+        return   Polls::paginate(6)->through(function ($item) {
+            return [
+                'id' => $item->id,
+                'poll_tittle' => $item->poll_tittle,
+                // etc
+            ];
+        });
     }
 }

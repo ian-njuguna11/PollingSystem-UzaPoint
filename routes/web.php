@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ChoicesController;
 use App\Http\Controllers\PollController;
+use App\Http\Controllers\PollVotingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionController;
 use Illuminate\Foundation\Application;
@@ -19,7 +20,7 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', [PollController::class, 'home'])->middleware(['auth']);
+Route::get('/', [PollController::class, 'home'])->middleware(['auth'])->name('polls.home');
 
 
 Route::get('/dashboard', function () {
@@ -31,6 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/polls', PollController::class);
     Route::resource('/questions', QuestionController::class);
     Route::resource('/choices', ChoicesController::class);
+    Route::resource('/poll-voting', PollVotingController::class);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
